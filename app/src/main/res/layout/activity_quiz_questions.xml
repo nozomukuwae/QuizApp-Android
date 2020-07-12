@@ -14,6 +14,7 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/question_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -26,7 +27,7 @@
             android:layout_height="16dp" />
 
         <ImageView
-            android:id="@+id/quiz_image"
+            android:id="@+id/question_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_flag_of_argentina" />
