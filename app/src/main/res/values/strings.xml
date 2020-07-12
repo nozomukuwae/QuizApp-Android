@@ -4,4 +4,5 @@
     <string name="enter_your_name">Please enter your name.</string>
     <string name="name">Name</string>
     <string name="start_button">START</string>
+    <string name="submit_button">SUBMIT</string>
 </resources>
