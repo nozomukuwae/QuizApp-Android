@@ -1,5 +1,7 @@
 package com.example.quizapp
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +13,10 @@ import org.w3c.dom.Text
 import java.lang.IllegalArgumentException
 
 class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
+    companion object {
+        const val REQUEST_CODE = 2
+    }
+
     enum class SubmitMode {
         NOT_YET, DONE
     }
@@ -81,20 +87,22 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
     fun onSubmit(view: View) {
         val questionListVal = questionList ?: return
-        val selectedOptionViewVal = selectedOptionView ?: return
+        val selectedOptionViewVal = selectedOptionView
 
         when(submitMode) {
             SubmitMode.NOT_YET -> {
-                if (getOptionIndex(selectedOptionViewVal) == questionListVal[currentIndex].answerIndex) {
+                if (selectedOptionViewVal != null
+                    && getOptionIndex(selectedOptionViewVal) == questionListVal[currentIndex].answerIndex) {
                     score ++
                     selectedOptionViewVal.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
                 } else {
-                    selectedOptionViewVal.background = ContextCompat.getDrawable(this, R.drawable.wrong_option_border_bg)
+                    selectedOptionViewVal?.background = ContextCompat.getDrawable(this, R.drawable.wrong_option_border_bg)
                     val correctOptionView = getOptionView(questionListVal[currentIndex].answerIndex)
                     correctOptionView.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
                 }
 
                 submitMode = SubmitMode.DONE
+                selectedOptionView = null
                 if (currentIndex < questionListVal.size - 1) {
                     submit_button.text = getString(R.string.go_to_next_question_button)
                 } else {
@@ -102,17 +110,30 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             SubmitMode.DONE -> {
+                submitMode = SubmitMode.NOT_YET
+
                 if (currentIndex < questionListVal.size - 1) {
                     currentIndex ++
+                    submit_button.text = getString(R.string.submit_button)
+                    showQuestion()
                 } else {
-                    currentIndex = 0
+                    val intent = Intent(this, ResultActivity::class.java)
+                    startActivityForResult(intent, REQUEST_CODE)
                 }
+            }
+        }
+    }
 
-                submitMode = SubmitMode.NOT_YET
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == ResultActivity.REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                currentIndex = 0
                 submit_button.text = getString(R.string.submit_button)
                 showQuestion()
             }
         }
+
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun getOptionIndex(view: View): Int {

@@ -7,4 +7,8 @@
     <string name="submit_button">SUBMIT</string>
     <string name="go_to_next_question_button">GO TO NEXT QUESTION</string>
     <string name="show_result_button">SHOW RESULT</string>
+    <string name="result">Result</string>
+    <string name="congratulations">Hey, Congratulations!</string>
+    <string name="finish_button">FINISH</string>
+    <string name="trophy">trophy</string>
 </resources>
