@@ -5,4 +5,6 @@
     <string name="name">Name</string>
     <string name="start_button">START</string>
     <string name="submit_button">SUBMIT</string>
+    <string name="go_to_next_question_button">GO TO NEXT QUESTION</string>
+    <string name="show_result_button">SHOW RESULT</string>
 </resources>
