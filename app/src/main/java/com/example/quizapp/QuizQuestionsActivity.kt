@@ -9,12 +9,14 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_quiz_questions.*
-import org.w3c.dom.Text
 import java.lang.IllegalArgumentException
 
 class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
-        const val REQUEST_CODE = 2
+        const val REQUEST_CODE = 1
+        const val NAME_KEY = "Name"
+        const val SCORE_KEY = "Score"
+        const val QUESTION_COUNT_KEY = "QuestionCount"
     }
 
     enum class SubmitMode {
@@ -27,10 +29,13 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private var selectedOptionView: TextView? = null
     private var score = 0
     private var submitMode = SubmitMode.NOT_YET
+    private var name: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz_questions)
+
+        name = intent.getStringExtra(MainActivity.NAME_KEY)
 
         questionList = questionFactory.createQuestions()
         showQuestion()
@@ -59,7 +64,9 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
+        if (submitMode != SubmitMode.NOT_YET) return
         if (view !is TextView) return
+
         highlightOptions(view)
         selectedOptionView = view
     }
@@ -118,6 +125,9 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
                     showQuestion()
                 } else {
                     val intent = Intent(this, ResultActivity::class.java)
+                    intent.putExtra(NAME_KEY, name)
+                    intent.putExtra(SCORE_KEY, score)
+                    intent.putExtra(QUESTION_COUNT_KEY, questionListVal.size)
                     startActivityForResult(intent, REQUEST_CODE)
                 }
             }
@@ -125,9 +135,10 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ResultActivity.REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 currentIndex = 0
+                score = 0
                 submit_button.text = getString(R.string.submit_button)
                 showQuestion()
             }

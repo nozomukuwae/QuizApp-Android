@@ -8,6 +8,10 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val NAME_KEY = "Name"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,6 +23,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "You need to enter your name.", Toast.LENGTH_LONG).show()
             } else {
                 val intent = Intent(this, QuizQuestionsActivity::class.java)
+                intent.putExtra(NAME_KEY, name_input.text.toString())
                 startActivity(intent)
                 finish()
             }
