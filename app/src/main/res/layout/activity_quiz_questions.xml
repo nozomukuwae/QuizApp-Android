@@ -121,6 +121,7 @@
             android:layout_margin="10dp"
             android:background="@color/colorPrimary"
             android:padding="15dp"
+            android:onClick="onSubmit"
             android:text="@string/submit_button"
             android:textColor="@android:color/white"
             android:textSize="18sp"
